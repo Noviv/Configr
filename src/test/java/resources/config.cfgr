@@ -1,0 +1,5 @@
+Configr 1.0.0a
+[TestConfig]
+writingworked=true
+working=true
+value=10.0
