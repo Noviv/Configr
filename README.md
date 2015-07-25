@@ -7,8 +7,6 @@ Small library that makes interfacing with configuration files easy.
 2. Add library to classpath/library folder.
 
 ## Example
-<code>
-ConfigrReadContext r = new ConfigrReadContext("src/test/java/resources/config.cfgr");//read file<br>
-ConfigrFile file = r.getConfigrFile();//get file<br>
-file.printAllSettings();//print all settings from file<br>
-</code>
+<code>ConfigrReadContext r = new ConfigrReadContext("src/test/java/resources/config.cfgr");//read file</code><br>
+<code>ConfigrFile file = r.getConfigrFile();//get file</code><br>
+<code>file.printAllSettings();//print all settings from file</code><br>
