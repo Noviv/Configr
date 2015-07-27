@@ -17,6 +17,7 @@ public class ConfigrFile {
 
     private ConfigrSettingsMap configs;
     private boolean configsChanged;
+    private boolean autoWrite;
 
     private String configName;
 
@@ -28,6 +29,16 @@ public class ConfigrFile {
      */
     public ConfigrFile(File file) {
         this(file.getAbsolutePath(), "");
+    }
+
+    /**
+     * Create a new ConfigrFile from a file path object without a name. Config
+     * file will be created if it does not exist.
+     *
+     * @param file File.
+     */
+    public ConfigrFile(String file) {
+        this(file, "");
     }
 
     /**
@@ -52,12 +63,22 @@ public class ConfigrFile {
         file = new File(path);
         configName = name;
         configs = new ConfigrSettingsMap();
-        configsChanged = false;
+        configsChanged = true;
+        autoWrite = false;
         try {
             file.createNewFile();
         } catch (Exception e) {
             throw new ConfigrIOException("Could not create new " + Configr.getName() + " file: " + e.getMessage());
         }
+    }
+
+    /**
+     * Set whether or not the config file will automatically be written.
+     *
+     * @param autoWrite_ True means auto write is on.
+     */
+    public void setAutoWrite(boolean autoWrite_) {
+        autoWrite = autoWrite_;
     }
 
     /**
@@ -110,16 +131,12 @@ public class ConfigrFile {
         set(key, value, ConfigrDataType.STRING);
     }
 
-    /**
-     * Set setting.
-     *
-     * @param key Setting.
-     * @param value Value.
-     * @param type Data type.
-     */
-    public void set(String key, Object value, ConfigrDataType type) {
+    private void set(String key, Object value, ConfigrDataType type) {
         configs.put(key, value, type);
         configsChanged = true;
+        if (autoWrite) {
+            write(true);
+        }
     }
 
     /**
@@ -130,6 +147,9 @@ public class ConfigrFile {
     public void setAll(ConfigrSettingsMap newSettings) {
         configs = newSettings;
         configsChanged = true;
+        if (autoWrite) {
+            write(true);
+        }
     }
 
     /**
@@ -157,9 +177,10 @@ public class ConfigrFile {
     }
 
     /**
-     * Print all settings, values, and data types to the console.
+     * Print name and all settings, values, and data types to the console.
      */
-    public void printAllSettings() {
+    public void printAll() {
+        System.out.println(configName);
         for (String setting : configs.getSettings()) {
             System.out.println(setting + "=" + configs.getSetting(setting) + "(" + configs.getType(setting) + ")");
         }
