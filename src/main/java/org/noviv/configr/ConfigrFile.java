@@ -21,18 +21,32 @@ public class ConfigrFile {
     private String configName;
 
     /**
+     * Create a new ConfigrFile from a File object without a name. Config file
+     * will be created if it does not exist.
      *
-     * @param file
-     * @param name
+     * @param file File.
+     */
+    public ConfigrFile(File file) {
+        this(file.getAbsolutePath(), "");
+    }
+
+    /**
+     * Create a new ConfigrFile from a File object. Config file will be created
+     * if it does not exist.
+     *
+     * @param file File.
+     * @param name Config name.
      */
     public ConfigrFile(File file, String name) {
         this(file.getAbsolutePath(), name);
     }
 
     /**
+     * Create a new ConfigrFile from a file path. Config file will be created if
+     * it does not exist.
      *
-     * @param path
-     * @param name
+     * @param path File path.
+     * @param name Config name.
      */
     public ConfigrFile(String path, String name) {
         file = new File(path);
@@ -47,55 +61,61 @@ public class ConfigrFile {
     }
 
     /**
+     * Set a setting to its default value.
      *
-     * @param key
-     * @param valueType
+     * @param key Setting.
+     * @param valueType Data type.
      */
     public void set(String key, ConfigrDataType valueType) {
         configs.put(key, valueType);
     }
 
     /**
+     * Set a setting to a double.
      *
-     * @param key
-     * @param value
+     * @param key Setting.
+     * @param value Setting value.
      */
     public void set(String key, double value) {
         set(key, value, ConfigrDataType.DOUBLE);
     }
 
     /**
+     * Set a setting to an int.
      *
-     * @param key
-     * @param value
+     * @param key Setting.
+     * @param value Setting value.
      */
     public void set(String key, int value) {
         set(key, value, ConfigrDataType.INTEGER);
     }
 
     /**
+     * Set a setting to a boolean.
      *
-     * @param key
-     * @param value
+     * @param key Setting.
+     * @param value Setting value.
      */
     public void set(String key, boolean value) {
         set(key, value, ConfigrDataType.BOOLEAN);
     }
 
     /**
+     * Set a setting to a string.
      *
-     * @param key
-     * @param value
+     * @param key Setting.
+     * @param value Setting value.
      */
     public void set(String key, String value) {
         set(key, value, ConfigrDataType.STRING);
     }
 
     /**
+     * Set setting.
      *
-     * @param key
-     * @param value
-     * @param type
+     * @param key Setting.
+     * @param value Value.
+     * @param type Data type.
      */
     public void set(String key, Object value, ConfigrDataType type) {
         configs.put(key, value, type);
@@ -103,8 +123,9 @@ public class ConfigrFile {
     }
 
     /**
+     * Change all values in current ConfigrFile to map values.
      *
-     * @param newSettings
+     * @param newSettings New settings.
      */
     public void setAll(ConfigrSettingsMap newSettings) {
         configs = newSettings;
@@ -145,50 +166,47 @@ public class ConfigrFile {
     }
 
     /**
+     * Get all settings in ConfigrFile.
      *
-     * @return
+     * @return Settings.
      */
     public Set<String> getSettings() {
         return configs.getSettings();
     }
 
     /**
+     * Get the value of a setting.
      *
-     * @param key
-     * @return
+     * @param key Setting.
+     * @return Value.
      */
     public Object getSetting(String key) {
         return configs.getSetting(key);
     }
 
     /**
+     * Get data type of a setting.
      *
-     * @param key
-     * @return
+     * @param key Setting.
+     * @return Data type.
      */
     public ConfigrDataType getSettingType(String key) {
         return configs.getType(key);
     }
 
     /**
+     * Get config name.
      *
-     * @return
+     * @return Name.
      */
     public String getName() {
         return configName;
     }
 
     /**
+     * Convert ConfigrFile to File.
      *
-     * @return
-     */
-    public boolean exists() {
-        return file.exists();
-    }
-
-    /**
-     *
-     * @return
+     * @return File.
      */
     public File toFile() {
         return file;
