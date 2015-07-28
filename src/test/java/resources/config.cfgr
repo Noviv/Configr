@@ -1,3 +1,5 @@
-Configr 1.0.0a
-[]
+[Config 1]
 working=true
+
+[Config 2]
+string=10

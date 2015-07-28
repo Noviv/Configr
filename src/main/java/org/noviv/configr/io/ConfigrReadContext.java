@@ -76,7 +76,7 @@ public class ConfigrReadContext {
         }
         nameBuffer = lines.get(1).replace("[", "").replace("]", "");
 
-        cFile = new ConfigrFile(inputFilePath, nameBuffer);
+        cFile = new ConfigrFile(nameBuffer, inputFilePath);
         for (int i = 2; i < lines.size(); i++) {
             String key = lines.get(i).substring(0, lines.get(i).indexOf("="));
             String value = lines.get(i).substring(lines.get(i).indexOf("=") + 1);
@@ -94,7 +94,8 @@ public class ConfigrReadContext {
     }
 
     /**
-     * Refresh the context and reload settings. Only necessary if file changes after read context is initialized.
+     * Refresh the context and reload settings. Only necessary if file changes
+     * after read context is initialized.
      *
      * @return ConfigrFile with new settings.
      */

@@ -5,6 +5,7 @@ import java.util.Set;
 import org.noviv.configr.data.ConfigrDataType;
 import org.noviv.configr.data.ConfigrSettingsMap;
 import org.noviv.configr.exceptions.ConfigrIOException;
+import org.noviv.configr.exceptions.ConfigrValidationException;
 import org.noviv.configr.io.ConfigrWriteContext;
 
 /**
@@ -17,59 +18,31 @@ public class ConfigrFile {
 
     private ConfigrSettingsMap configs;
     private boolean configsChanged;
-    private boolean autoWrite;
 
     private String configName;
+    private boolean autoWrite;
 
     /**
-     * Create a new ConfigrFile from a File object without a name. Config file
-     * will be created if it does not exist.
+     * Create a new ConfigrFile.
      *
-     * @param file File.
-     */
-    public ConfigrFile(File file) {
-        this(file.getAbsolutePath(), "");
-    }
-
-    /**
-     * Create a new ConfigrFile from a file path object without a name. Config
-     * file will be created if it does not exist.
-     *
-     * @param file File.
-     */
-    public ConfigrFile(String file) {
-        this(file, "");
-    }
-
-    /**
-     * Create a new ConfigrFile from a File object. Config file will be created
-     * if it does not exist.
-     *
-     * @param file File.
      * @param name Config name.
      */
-    public ConfigrFile(File file, String name) {
-        this(file.getAbsolutePath(), name);
+    public ConfigrFile(String name) {
+        this(name, null);
     }
 
     /**
-     * Create a new ConfigrFile from a file path. Config file will be created if
-     * it does not exist.
+     * Create a new ConfigrFile and assign a file.
      *
-     * @param path File path.
      * @param name Config name.
+     * @param filePath Path to file.
      */
-    public ConfigrFile(String path, String name) {
-        file = new File(path);
+    public ConfigrFile(String name, String filePath) {
         configName = name;
         configs = new ConfigrSettingsMap();
         configsChanged = true;
         autoWrite = false;
-        try {
-            file.createNewFile();
-        } catch (Exception e) {
-            throw new ConfigrIOException("Could not create new " + Configr.getName() + " file: " + e.getMessage());
-        }
+        assignFile(filePath);
     }
 
     /**
@@ -78,7 +51,37 @@ public class ConfigrFile {
      * @param autoWrite_ True means auto write is on.
      */
     public void setAutoWrite(boolean autoWrite_) {
+        if (file == null && autoWrite_) {
+            throw new ConfigrValidationException("Cannot enable autowriting without assigning a file.");
+        }
         autoWrite = autoWrite_;
+    }
+
+    /**
+     * Assign ConfigrFile object to a file. File will be created if it doesn't
+     * exist.
+     *
+     * @param filePath Path of file.
+     */
+    public void assignFile(String filePath) {
+        if (filePath != null) {
+            assignFile(new File(filePath));
+        }
+    }
+
+    /**
+     * Assign ConfigrFile object to a file. File will be created if it doesn't
+     * exist.
+     *
+     * @param file_ File.
+     */
+    public void assignFile(File file_) {
+        file = file_;
+        try {
+            file.createNewFile();
+        } catch (Exception e) {
+            throw new ConfigrIOException("Could not create config file: " + e.getMessage());
+        }
     }
 
     /**
@@ -230,6 +233,9 @@ public class ConfigrFile {
      * @return File.
      */
     public File toFile() {
+        if (file == null) {
+            throw new ConfigrValidationException("Cannot convert to File, config file not assigned yet.");
+        }
         return file;
     }
 }
