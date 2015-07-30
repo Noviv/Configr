@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
-Test set: org.noviv.configr.ReadConfigFileTest
+Test set: org.noviv.junit.ConfigrTest
 -------------------------------------------------------------------------------
-Tests run: 0, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.027 sec
