@@ -6,93 +6,127 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import org.noviv.configr.ConfigrFile;
 import org.noviv.configr.data.ConfigrDataType;
 import org.noviv.configr.data.ConfigrSettingsMap;
 import org.noviv.configr.exceptions.ConfigrBufferException;
 import org.noviv.configr.exceptions.ConfigrIOException;
 
+/**
+ * The context in which any configuration file is imported as an array of
+ * ConfigrFile objects. Must be refreshed when a file changed.
+ */
 public class ConfigrImportContext {
 
-    private HashMap<String, ConfigrSettingsMap> maps;
-    private ConfigrSettingsMap map;
+    private File file;
 
-    private ArrayList<ConfigrFile> importedConfigObjects;
+    private ArrayList<String> linesBuffer;
+    private ArrayList<String> nameBuffer;
+    private ArrayList<ConfigrSettingsMap> configBuffer;
 
+    private ConfigrFile[] importedConfigObjects;
+
+    /**
+     * Create a new read context.
+     *
+     * @param filePath Path to target file.
+     * @throws FileNotFoundException Thrown the file cannot be found/read by the
+     * JVM.
+     */
     public ConfigrImportContext(String filePath) throws FileNotFoundException {
         this(new File(filePath));
     }
 
-    public ConfigrImportContext(File file) throws FileNotFoundException {
+    /**
+     * Create a new read context.
+     *
+     * @param file_ File.
+     * @throws FileNotFoundException Thrown the file cannot be found/read by the
+     * JVM.
+     */
+    public ConfigrImportContext(File file_) throws FileNotFoundException {
+        file = file_;
         if (!file.exists()) {
             throw new ConfigrBufferException("File selected to import does not exist.");
         }
-        maps = new HashMap<>();
-        importedConfigObjects = new ArrayList<>();
-        run(file);
+        loadLineBuffer();
+        loadImportBuffer();
     }
 
-    private void run(File file) throws FileNotFoundException {
-        //read
+    /**
+     * Refresh the context and reload settings. Only necessary if file changes
+     * after read context is initialized.
+     *
+     * @return The updated imported objects.
+     */
+    public ConfigrFile[] refresh() {
+        try {
+            loadLineBuffer();
+            loadImportBuffer();
+        } catch (Exception e) {
+        }
+        return getImportedFiles();
+    }
+
+    private void loadLineBuffer() throws FileNotFoundException {
         BufferedReader br = new BufferedReader(new FileReader(file));
-        ArrayList<String> lines = new ArrayList<>();
+        linesBuffer = new ArrayList<>();
         String line;
         try {
             while ((line = br.readLine()) != null) {
-                lines.add(line);
+                linesBuffer.add(line);
             }
         } catch (IOException e) {
             throw new ConfigrIOException("Could not import file: " + e.getMessage());
         }
+    }
 
-        //interpret
-        line = null;
-        String prevName = null;
-        boolean multiple = false;
-        for (int i = 0; i < lines.size(); i++) {
-            line = lines.get(i);
-            if (line.contains("[") && line.contains("]")) {
-                if (map == null) {
-                    map = new ConfigrSettingsMap();
-                } else {
-                    maps.put(prevName, map);
-                    map.clear();
+    private void loadImportBuffer() {
+        nameBuffer = new ArrayList<>();
+        configBuffer = new ArrayList<>();
+        ConfigrSettingsMap currentConfig = null;
+        for (String s : linesBuffer) {
+            if (s.contains("[") && s.contains("]")) {
+                if (currentConfig != null) {
+                    configBuffer.add(currentConfig);
                 }
-                prevName = line.replace("[", "").replace("]", "");
-            } else if (line.contains("=")) {
-                String key = line.substring(0, line.indexOf("="));
-                String value = line.substring(line.indexOf("=") + 1);
+                currentConfig = new ConfigrSettingsMap();
+                nameBuffer.add(s.replace("[", "").replace("]", ""));
+            } else if (s.contains("=")) {
+                String key = s.substring(0, s.indexOf("="));
+                String value = s.substring(s.indexOf("=") + 1);
                 if (value.contains("true") || value.contains("false")) {
-                    map.put(key, value, ConfigrDataType.BOOLEAN);
+                    currentConfig.put(key, value, ConfigrDataType.BOOLEAN);
                 } else if (value.matches("^-?\\d+$")) {
-                    map.put(key, value, ConfigrDataType.INTEGER);
+                    currentConfig.put(key, value, ConfigrDataType.INTEGER);
                 } else if (value.matches("-?\\d+(\\.\\d+)?")) {
-                    map.put(key, value, ConfigrDataType.DOUBLE);
+                    currentConfig.put(key, value, ConfigrDataType.DOUBLE);
                 } else {
-                    map.put(key, value, ConfigrDataType.STRING);
+                    currentConfig.put(key, value, ConfigrDataType.STRING);
                 }
             }
         }
-        maps.put(prevName, map);
+        if (currentConfig != null) {
+            configBuffer.add(currentConfig);
+        }
 
-        //convert
-        ConfigrFile cFile;
-        for (String s : maps.keySet()) {
-            cFile = new ConfigrFile(s);
-            cFile.setAll(maps.get(s));
-            importedConfigObjects.add(cFile);
+        if (nameBuffer.size() != configBuffer.size()) {
+            throw new ConfigrBufferException("Import buffer length mismatch: name/config.");
+        }
+
+        importedConfigObjects = new ConfigrFile[nameBuffer.size()];
+        for (int i = 0; i < importedConfigObjects.length; i++) {
+            importedConfigObjects[i] = new ConfigrFile(nameBuffer.get(i));
+            importedConfigObjects[i].setAll(configBuffer.get(i));
         }
     }
 
-    public ArrayList<ConfigrFile> getImportedFiles() {
+    /**
+     * Get all imported ConfigrFile objects.
+     *
+     * @return Array of ConfigrFile objects.
+     */
+    public ConfigrFile[] getImportedFiles() {
         return importedConfigObjects;
-    }
-
-    public void printAll() {
-        for (ConfigrFile c : importedConfigObjects) {
-            System.out.println("FILE");
-            c.printAll();
-        }
     }
 }

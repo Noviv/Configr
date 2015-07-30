@@ -39,6 +39,21 @@ public class ConfigrReadContext {
     }
 
     /**
+     * Refresh the context and reload settings. Only necessary if file changes
+     * after read context is initialized.
+     *
+     * @return ConfigrFile with new settings.
+     */
+    public ConfigrFile refresh() {
+        try {
+            process();
+        } catch (Exception e) {
+            throw new ConfigrBufferException(Configr.getName() + " read buffer could not be refreshed: " + e.getMessage());
+        }
+        return cFile;
+    }
+
+    /**
      * Create a new read context.
      *
      * @param target The target file.
@@ -91,21 +106,6 @@ public class ConfigrReadContext {
             }
         }
         cFile.setAll(settings);
-    }
-
-    /**
-     * Refresh the context and reload settings. Only necessary if file changes
-     * after read context is initialized.
-     *
-     * @return ConfigrFile with new settings.
-     */
-    public ConfigrFile refresh() {
-        try {
-            process();
-        } catch (Exception e) {
-            throw new ConfigrBufferException(Configr.getName() + " read buffer could not be refreshed: " + e.getMessage());
-        }
-        return cFile;
     }
 
     /**
