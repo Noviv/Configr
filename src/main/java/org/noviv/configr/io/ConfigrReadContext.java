@@ -19,12 +19,12 @@ import org.noviv.configr.exceptions.ConfigrValidationException;
  * the object.
  */
 public class ConfigrReadContext {
-
+    
     private String inputFilePath;
-
+    
     private String nameBuffer;
     private ConfigrFile cFile;
-
+    
     private ConfigrSettingsMap settings;
 
     /**
@@ -48,7 +48,7 @@ public class ConfigrReadContext {
         try {
             process();
         } catch (Exception e) {
-            throw new ConfigrBufferException(Configr.getName() + " read buffer could not be refreshed: " + e.getMessage());
+            throw new ConfigrBufferException("Configr read buffer could not be refreshed: " + e.getMessage());
         }
         return cFile;
     }
@@ -69,11 +69,11 @@ public class ConfigrReadContext {
             if (e instanceof FileNotFoundException) {
                 throw new FileNotFoundException(e.getMessage());
             } else {
-                throw new ConfigrBufferException(Configr.getName() + " read buffer could not be initialized: " + e.getMessage());
+                throw new ConfigrBufferException("Configr read buffer could not be initialized: " + e.getMessage());
             }
         }
     }
-
+    
     private void process() throws IOException {
         File f = new File(inputFilePath);
         if (!f.getName().substring(f.getName().indexOf(".")).equals(".cfgr")) {
@@ -85,12 +85,12 @@ public class ConfigrReadContext {
         while ((line = br.readLine()) != null) {
             lines.add(line);
         }
-
-        if (!lines.get(0).equals(Configr.getCheckHead())) {
-            throw new ConfigrValidationException("Invalid " + Configr.getName() + " check head: " + lines.get(0) + " (Should be: " + Configr.getCheckHead() + ")");
+        
+        if (!Configr.validateCheckHead(lines.get(0))) {
+            throw new ConfigrValidationException("Invalid Configr check head: " + lines.get(0) + " (Should be: " + Configr.getCheckHead() + ")");
         }
         nameBuffer = lines.get(1).replace("[", "").replace("]", "");
-
+        
         cFile = new ConfigrFile(nameBuffer, inputFilePath);
         for (int i = 2; i < lines.size(); i++) {
             String key = lines.get(i).substring(0, lines.get(i).indexOf("="));
