@@ -7,9 +7,9 @@ public class Configr {
 
     private static final String LIBRARY_NAME = "Configr";
 
-    private static final int VERSION_MAJOR = 2;
-    private static final int VERSION_MINOR = 3;
-    private static final int VERSION_REVISION = 5;
+    private static final int VERSION_MAJOR = 1;
+    private static final int VERSION_MINOR = 0;
+    private static final int VERSION_REVISION = 0;
 
     private static final int VERSION_CHECK = 100 * VERSION_MAJOR
             + 10 * VERSION_MINOR
@@ -63,9 +63,9 @@ public class Configr {
         if (!comps[0].equals(getName())) {
             return false;
         }
-
-        if (comps[1].charAt(5) != BUILD_TYPE) {
-            return false;
+        //comps[1].charAt(5)
+        if (BUILD_TYPE == 'a') {
+            
         }
         int check = 100 * Integer.parseInt(comps[1].substring(0, 1))
                 + 10 * Integer.parseInt(comps[1].substring(2, 3))
