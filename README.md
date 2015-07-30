@@ -1,4 +1,4 @@
-# Configr
+# Configr [![Build Status](https://travis-ci.org/Noviv/Configr.svg?branch=master)](https://travis-ci.org/Noviv/Configr)
 Small library that makes interfacing with configuration files easy.
 
 
