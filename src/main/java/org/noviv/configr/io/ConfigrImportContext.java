@@ -13,8 +13,7 @@ import org.noviv.configr.exceptions.ConfigrBufferException;
 import org.noviv.configr.exceptions.ConfigrIOException;
 
 /**
- * The context in which any configuration file is imported as an array of
- * ConfigrFile objects. Must be refreshed when a file changed.
+ * The context in which any configuration file is imported as an array of ConfigrFile objects. Must be refreshed when a file changed.
  */
 public class ConfigrImportContext {
 
@@ -23,6 +22,7 @@ public class ConfigrImportContext {
     private ArrayList<String> linesBuffer;
     private ArrayList<String> nameBuffer;
     private ArrayList<ConfigrSettingsMap> configBuffer;
+    private ConfigrSettingsMap nullBuffer;
 
     private ConfigrFile[] importedConfigObjects;
 
@@ -30,8 +30,7 @@ public class ConfigrImportContext {
      * Create a new read context.
      *
      * @param filePath Path to target file.
-     * @throws FileNotFoundException Thrown the file cannot be found/read by the
-     * JVM.
+     * @throws FileNotFoundException Thrown the file cannot be found/read by the JVM.
      */
     public ConfigrImportContext(String filePath) throws FileNotFoundException {
         this(new File(filePath));
@@ -41,8 +40,7 @@ public class ConfigrImportContext {
      * Create a new read context.
      *
      * @param file_ File.
-     * @throws FileNotFoundException Thrown the file cannot be found/read by the
-     * JVM.
+     * @throws FileNotFoundException Thrown the file cannot be found/read by the JVM.
      */
     public ConfigrImportContext(File file_) throws FileNotFoundException {
         file = file_;
@@ -54,8 +52,7 @@ public class ConfigrImportContext {
     }
 
     /**
-     * Refresh the context and reload settings. Only necessary if file changes
-     * after read context is initialized.
+     * Refresh the context and reload settings. Only necessary if file changes after read context is initialized.
      *
      * @return The updated imported objects.
      */
@@ -71,6 +68,7 @@ public class ConfigrImportContext {
     private void loadLineBuffer() throws FileNotFoundException {
         BufferedReader br = new BufferedReader(new FileReader(file));
         linesBuffer = new ArrayList<>();
+        nullBuffer = new ConfigrSettingsMap();
         String line;
         try {
             while ((line = br.readLine()) != null) {
@@ -96,13 +94,29 @@ public class ConfigrImportContext {
                 String key = s.substring(0, s.indexOf("="));
                 String value = s.substring(s.indexOf("=") + 1);
                 if (value.contains("true") || value.contains("false")) {
-                    currentConfig.put(key, value, ConfigrDataType.BOOLEAN);
+                    if (currentConfig != null) {
+                        currentConfig.put(key, value, ConfigrDataType.BOOLEAN);
+                    } else {
+                        nullBuffer.put(key, value, ConfigrDataType.BOOLEAN);
+                    }
                 } else if (value.matches("^-?\\d+$")) {
-                    currentConfig.put(key, value, ConfigrDataType.INTEGER);
+                    if (currentConfig != null) {
+                        currentConfig.put(key, value, ConfigrDataType.INTEGER);
+                    } else {
+                        nullBuffer.put(key, value, ConfigrDataType.INTEGER);
+                    }
                 } else if (value.matches("-?\\d+(\\.\\d+)?")) {
-                    currentConfig.put(key, value, ConfigrDataType.DOUBLE);
+                    if (currentConfig != null) {
+                        currentConfig.put(key, value, ConfigrDataType.DOUBLE);
+                    } else {
+                        nullBuffer.put(key, value, ConfigrDataType.DOUBLE);
+                    }
                 } else {
-                    currentConfig.put(key, value, ConfigrDataType.STRING);
+                    if (currentConfig != null) {
+                        currentConfig.put(key, value, ConfigrDataType.STRING);
+                    } else {
+                        nullBuffer.put(key, value, ConfigrDataType.STRING);
+                    }
                 }
             }
         }
