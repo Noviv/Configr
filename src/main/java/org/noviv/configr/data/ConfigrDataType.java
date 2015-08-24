@@ -20,7 +20,11 @@ public enum ConfigrDataType {
     /**
      * Double data type. Default 0.0.
      */
-    DOUBLE("Double", 0.0);
+    DOUBLE("Double", 0.0),
+    /**
+     * Null value. Default null;
+     */
+    NULL("Null", null);
 
     private String name;
     private Object def;
