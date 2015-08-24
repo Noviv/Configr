@@ -129,7 +129,7 @@ public class ConfigrImportContext {
         if (currentConfig != null) {
             configBuffer.add(currentConfig);
         }
-        
+
         if (nameBuffer.size() != configBuffer.size()) {
             throw new ConfigrBufferException("Import buffer length mismatch: name/config.");
         }
@@ -138,13 +138,15 @@ public class ConfigrImportContext {
         if (nullBuffer.size() > 0) {
             add = 1;
         }
+
         importedConfigObjects = new ConfigrFile[nameBuffer.size() + add];
-        for (int i = 0; i < importedConfigObjects.length; i++) {
+        for (int i = 0; i < importedConfigObjects.length - add; i++) {
             importedConfigObjects[i] = new ConfigrFile(nameBuffer.get(i));
             importedConfigObjects[i].setAll(configBuffer.get(i));
         }
-        
+
         if (add == 1) {
+            importedConfigObjects[nameBuffer.size()] = new ConfigrFile("Null Config");
             importedConfigObjects[nameBuffer.size()].setAll(nullBuffer);
         }
     }
