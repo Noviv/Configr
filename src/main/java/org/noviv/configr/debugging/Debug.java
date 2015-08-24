@@ -5,16 +5,16 @@ import java.sql.Timestamp;
 
 public class Debug {
 
+    static {
+        setDebugStream(System.out);
+    }
+
     private static PrintStream out;
 
     private Debug() {
     }
 
-    public static void init() {
-        init(System.out);
-    }
-
-    public static void init(PrintStream out_) {
+    public static void setDebugStream(PrintStream out_) {
         out = out_;
     }
 
