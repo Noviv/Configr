@@ -39,8 +39,7 @@ public class Configr {
     }
 
     /**
-     * Get the check-head of all Configr files. Must be present in order to
-     * validate settings file.
+     * Get the check-head of all Configr files. Must be present in order to validate settings file.
      *
      * @return String containing value used as check-head.
      */
@@ -49,8 +48,7 @@ public class Configr {
     }
 
     /**
-     * Validate the check-head of a Configr file. Compatible with previous
-     * versions.
+     * Validate the check-head of a Configr file. Compatible with previous versions.
      *
      * @param toValidate Check-head to validate.
      * @return Validated.
@@ -62,10 +60,6 @@ public class Configr {
         String[] comps = toValidate.split(" ");
         if (!comps[0].equals(getName())) {
             return false;
-        }
-        //comps[1].charAt(5)
-        if (BUILD_TYPE == 'a') {
-            
         }
         int check = 100 * Integer.parseInt(comps[1].substring(0, 1))
                 + 10 * Integer.parseInt(comps[1].substring(2, 3))

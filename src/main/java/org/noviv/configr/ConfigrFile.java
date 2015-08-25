@@ -9,8 +9,7 @@ import org.noviv.configr.exceptions.ConfigrValidationException;
 import org.noviv.configr.io.ConfigrWriteContext;
 
 /**
- * Main class of the Configr library. Holds all interfaces with the Configr
- * library.
+ * Main class of the Configr library. Holds all interfaces with the Configr library.
  */
 public class ConfigrFile {
 
@@ -21,6 +20,8 @@ public class ConfigrFile {
 
     private String configName;
     private boolean autoWrite;
+
+    private ConfigrWriteContext writeContext;
 
     /**
      * Create a new ConfigrFile.
@@ -58,8 +59,7 @@ public class ConfigrFile {
     }
 
     /**
-     * Assign ConfigrFile object to a file. File will be created if it doesn't
-     * exist.
+     * Assign ConfigrFile object to a file. File will be created if it doesn't exist.
      *
      * @param filePath Path of file.
      */
@@ -70,8 +70,7 @@ public class ConfigrFile {
     }
 
     /**
-     * Assign ConfigrFile object to a file. File will be created if it doesn't
-     * exist.
+     * Assign ConfigrFile object to a file. File will be created if it doesn't exist.
      *
      * @param file_ File.
      */

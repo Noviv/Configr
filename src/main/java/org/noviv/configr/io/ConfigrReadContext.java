@@ -14,33 +14,29 @@ import org.noviv.configr.exceptions.ConfigrBufferException;
 import org.noviv.configr.exceptions.ConfigrValidationException;
 
 /**
- * The context in which a file is read into a ConfigrFile object. Must be
- * refreshed when a file changed, and must be written when data is changed in
- * the object.
+ * The context in which a file is read into a ConfigrFile object. Must be refreshed when a file changed, and must be written when data is changed in the object.
  */
 public class ConfigrReadContext {
-    
+
     private String inputFilePath;
-    
+
     private String nameBuffer;
     private ConfigrFile cFile;
-    
+
     private ConfigrSettingsMap settings;
 
     /**
      * Create a new read context.
      *
      * @param path Path to target file.
-     * @throws FileNotFoundException Thrown the file cannot be found/read by the
-     * JVM.
+     * @throws FileNotFoundException Thrown the file cannot be found/read by the JVM.
      */
     public ConfigrReadContext(String path) throws FileNotFoundException {
         this(new File(path));
     }
 
     /**
-     * Refresh the context and reload settings. Only necessary if file changes
-     * after read context is initialized.
+     * Refresh the context and reload settings. Only necessary if file changes after read context is initialized.
      *
      * @return ConfigrFile with new settings.
      */
@@ -57,8 +53,7 @@ public class ConfigrReadContext {
      * Create a new read context.
      *
      * @param target The target file.
-     * @throws FileNotFoundException Thrown if the file cannot be found/read by
-     * the JVM.
+     * @throws FileNotFoundException Thrown if the file cannot be found/read by the JVM.
      */
     public ConfigrReadContext(File target) throws FileNotFoundException {
         inputFilePath = target.getAbsolutePath();
@@ -73,7 +68,7 @@ public class ConfigrReadContext {
             }
         }
     }
-    
+
     private void process() throws IOException {
         File f = new File(inputFilePath);
         if (!f.getName().substring(f.getName().indexOf(".")).equals(".cfgr")) {
@@ -85,12 +80,12 @@ public class ConfigrReadContext {
         while ((line = br.readLine()) != null) {
             lines.add(line);
         }
-        
+
         if (!Configr.validateCheckHead(lines.get(0))) {
             throw new ConfigrValidationException("Invalid Configr check head: " + lines.get(0) + " (Should be: " + Configr.getCheckHead() + ")");
         }
         nameBuffer = lines.get(1).replace("[", "").replace("]", "");
-        
+
         cFile = new ConfigrFile(nameBuffer, inputFilePath);
         for (int i = 2; i < lines.size(); i++) {
             String key = lines.get(i).substring(0, lines.get(i).indexOf("="));

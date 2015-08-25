@@ -6,8 +6,7 @@ import org.noviv.configr.ConfigrFile;
 import org.noviv.configr.exceptions.ConfigrBufferException;
 
 /**
- * The context in which a file is written to the system. Must only be flushed
- * once, or reset.
+ * The context in which a file is written to the system. Must only be flushed once, or reset.
  */
 public class ConfigrWriteContext {
 
