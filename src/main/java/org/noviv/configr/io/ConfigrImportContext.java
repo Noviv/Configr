@@ -27,7 +27,7 @@ public class ConfigrImportContext {
     private ConfigrFile[] importedConfigObjects;
 
     /**
-     * Create a new read context.
+     * Create a new import context.
      *
      * @param filePath Path to target file.
      * @throws FileNotFoundException Thrown the file cannot be found/read by the JVM.
@@ -37,9 +37,9 @@ public class ConfigrImportContext {
     }
 
     /**
-     * Create a new read context.
+     * Create a new import context.
      *
-     * @param file_ File.
+     * @param file File.
      * @throws FileNotFoundException Thrown the file cannot be found/read by the JVM.
      */
     public ConfigrImportContext(File file_) throws FileNotFoundException {

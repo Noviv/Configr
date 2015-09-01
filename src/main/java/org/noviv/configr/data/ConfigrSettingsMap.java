@@ -2,6 +2,8 @@ package org.noviv.configr.data;
 
 import java.util.HashMap;
 import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 /**
  * Map of all settings and their data types.
