@@ -25,6 +25,7 @@ public class ConfigrImportContext {
     private ConfigrSettingsMap nullBuffer;
 
     private ConfigrFile[] importedConfigObjects;
+    private boolean nullBufferActive;
 
     /**
      * Create a new import context.
@@ -39,10 +40,11 @@ public class ConfigrImportContext {
     /**
      * Create a new import context.
      *
-     * @param file File.
+     * @param file_ File.
      * @throws FileNotFoundException Thrown the file cannot be found/read by the JVM.
      */
     public ConfigrImportContext(File file_) throws FileNotFoundException {
+        nullBufferActive = false;
         file = file_;
         if (!file.exists()) {
             throw new ConfigrBufferException("File selected to import does not exist.");
@@ -137,6 +139,7 @@ public class ConfigrImportContext {
         int add = 0;
         if (nullBuffer.size() > 0) {
             add = 1;
+            nullBufferActive = true;
         }
 
         importedConfigObjects = new ConfigrFile[nameBuffer.size() + add];
@@ -158,5 +161,14 @@ public class ConfigrImportContext {
      */
     public ConfigrFile[] getImportedFiles() {
         return importedConfigObjects;
+    }
+
+    /**
+     * Check whether or not the null buffer was activated while importing.
+     *
+     * @return True means the null buffer is active.
+     */
+    public boolean isNullBufferActive() {
+        return nullBufferActive;
     }
 }
