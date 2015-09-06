@@ -14,8 +14,8 @@ Small library that makes interfacing with configuration files easy.
 
 ##### Import File
 <code>ConfigrImportContext i = new ConfigrImportContext("src/test/java/resources/config.cfgr");</code><br>
-<code>for (ConfigrFile f : i.getImportedFiles()) {
-  f.printAllSettings();
+<code>for (ConfigrFile f : i.getImportedFiles()) {<br>
+  f.printAllSettings();<br>
 <code>}</code><br>
 
 ##### Write File
