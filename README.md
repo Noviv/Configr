@@ -35,3 +35,7 @@ f.set("working", true);
 //write the file
 f.writeIfNecessary();
 ```
+
+## Branches
+master - the most recent updates
+build - the stable build
