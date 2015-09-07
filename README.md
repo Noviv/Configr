@@ -8,17 +8,22 @@ Small library that makes interfacing with configuration files easy.
 
 ## Examples
 ##### Read File
-<code>ConfigrReadContext r = new ConfigrReadContext("src/test/java/resources/config.cfgr");//read file</code><br>
-<code>ConfigrFile file = r.getConfigrFile();//get file</code><br>
-<code>file.printAllSettings();//print all settings from file</code><br>
-
+```java
+ConfigrReadContext r = new ConfigrReadContext("src/test/java/resources/config.cfgr");//read file
+ConfigrFile file = r.getConfigrFile();//get file
+file.printAllSettings();//print all settings from file
+```
 ##### Import File
-<code>ConfigrImportContext i = new ConfigrImportContext("src/test/java/resources/config.cfgr");</code><br>
-<code>for (ConfigrFile f : i.getImportedFiles()) {
+```java
+ConfigrImportContext i = new ConfigrImportContext("src/test/java/resources/config.cfgr");
+for (ConfigrFile f : i.getImportedFiles()) {
   f.printAllSettings();
-}</code><br>
+}
+```
 
 ##### Write File
-<code>ConfigrFile f = new ConfigrFile("Test", "src/test/java/resources/config.cfgr");</code><br>
-<code>f.set("working", true);</code><br>
-<code>f.writeIfNecessary();</code><br>
+```java
+ConfigrFile f = new ConfigrFile("Test", "src/test/java/resources/config.cfgr");
+f.set("working", true);
+f.writeIfNecessary();
+```
