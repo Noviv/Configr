@@ -37,5 +37,5 @@ f.writeIfNecessary();
 ```
 
 ## Branches
-master - the most recent updates
-build - the stable build
+<code>master</code> - the most recent updates<br>
+<code>build</code> - the stable build
