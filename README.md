@@ -40,6 +40,6 @@ f.writeIfNecessary();
 <code>build</code> - the stable build
 
 ## To do
-[X] Add import capability
-[ ] Allow for non-standard config mapping (space instead of '=')
-[ ] Add static reference for all classes (easy access)
+[X] Add import capability<br>
+[&nbsp;] Allow for non-standard config mapping (space instead of '=')<br>
+[&nbsp;] Add static reference for all classes (easy access)<br>
