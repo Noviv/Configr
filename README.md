@@ -1,6 +1,5 @@
 # Configr [![Build Status](https://travis-ci.org/Noviv/Configr.svg?branch=master)](https://travis-ci.org/Noviv/Configr)
-Small library that makes interfacing with configuration files easy.
-
+Small library that makes interfacing with configuration files easy. Can read config files, write new config files, and import non-standard system/program config files.
 
 ## Use
 1. Download Configr-1.0-SNAPSHOT.jar from the target/ folder.
@@ -39,3 +38,8 @@ f.writeIfNecessary();
 ## Branches
 <code>master</code> - the most recent updates<br>
 <code>build</code> - the stable build
+
+## To do
+[X] Add import capability
+[ ] Allow for non-standard config mapping (space instead of '=')
+[ ] Add static reference for all classes (easy access)
