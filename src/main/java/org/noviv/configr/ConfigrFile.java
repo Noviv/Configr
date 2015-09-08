@@ -43,7 +43,7 @@ public class ConfigrFile {
         configs = new ConfigrSettingsMap();
         configsChanged = true;
         autoWrite = false;
-        assignFile(filePath);
+        ConfigrFile.this.setWriteFile(filePath);
     }
 
     /**
@@ -63,9 +63,9 @@ public class ConfigrFile {
      *
      * @param filePath Path of file.
      */
-    public void assignFile(String filePath) {
+    public void setWriteFile(String filePath) {
         if (filePath != null) {
-            assignFile(new File(filePath));
+            setWriteFile(new File(filePath));
         }
     }
 
@@ -74,7 +74,7 @@ public class ConfigrFile {
      *
      * @param file_ File.
      */
-    public void assignFile(File file_) {
+    public void setWriteFile(File file_) {
         file = file_;
         try {
             file.createNewFile();

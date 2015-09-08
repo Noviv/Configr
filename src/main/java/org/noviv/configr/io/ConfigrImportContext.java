@@ -18,6 +18,7 @@ import org.noviv.configr.exceptions.ConfigrIOException;
 public class ConfigrImportContext {
 
     private File file;
+    private String regex;
 
     private ArrayList<String> linesBuffer;
     private ArrayList<String> nameBuffer;
@@ -46,11 +47,27 @@ public class ConfigrImportContext {
     public ConfigrImportContext(File file_) throws FileNotFoundException {
         nullBufferActive = false;
         file = file_;
+        regex = "=";
         if (!file.exists()) {
             throw new ConfigrBufferException("File selected to import does not exist.");
         }
         loadLineBuffer();
         loadImportBuffer();
+    }
+
+    /**
+     * Set the regex upon which the configuration map is split. The default regex is "=".<br><br>
+     * key=value ("=" is the regex)<br>
+     * key value (" " is the regex)
+     *
+     * @param regex_ The new regex.
+     */
+    public void setImportRegex(String regex_) {
+        if (regex != null && !regex.isEmpty()) {
+            regex = regex_;
+        } else {
+            throw new ConfigrBufferException("Invalid regex for import buffer.");
+        }
     }
 
     /**
@@ -93,8 +110,8 @@ public class ConfigrImportContext {
                 currentConfig = new ConfigrSettingsMap();
                 nameBuffer.add(s.replace("[", "").replace("]", ""));
             } else if (s.contains("=")) {
-                String key = s.substring(0, s.indexOf("="));
-                String value = s.substring(s.indexOf("=") + 1);
+                String key = s.substring(0, s.indexOf(regex));
+                String value = s.substring(s.indexOf(regex) + 1);
                 if (value.contains("true") || value.contains("false")) {
                     if (currentConfig != null) {
                         currentConfig.put(key, value, ConfigrDataType.BOOLEAN);
