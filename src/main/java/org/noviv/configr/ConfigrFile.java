@@ -220,10 +220,46 @@ public class ConfigrFile {
     /**
      * Get config name.
      *
-     * @return Name.
+     * @return Config name.
      */
     public String getName() {
         return configName;
+    }
+
+    /**
+     * Get the name of the assigned file.
+     *
+     * @return File name.
+     */
+    public String getFileName() {
+        if (file == null) {
+            throw new ConfigrValidationException("Cannot convert to File, config file not assigned yet.");
+        }
+        return file.getName();
+    }
+
+    /**
+     * Get the absolute path of the assigned file.
+     *
+     * @return Absolute file path.
+     */
+    public String getAbsolutePath() {
+        if (file == null) {
+            throw new ConfigrValidationException("Cannot convert to File, config file not assigned yet.");
+        }
+        return file.getAbsolutePath();
+    }
+
+    /**
+     * Check whether or not Java has write access to the assigned file.
+     *
+     * @return True means that Java has write access.
+     */
+    public boolean canWrite() {
+        if (file == null) {
+            throw new ConfigrValidationException("Cannot convert to File, config file not assigned yet.");
+        }
+        return file.canWrite();
     }
 
     /**
