@@ -39,35 +39,34 @@ public class ConfigrImportContext {
     }
 
     /**
-     * Create a new import context.
+     * Create a new import context with the default regex '=';
      *
      * @param file_ File.
      * @throws FileNotFoundException Thrown the file cannot be found/read by the JVM.
      */
     public ConfigrImportContext(File file_) throws FileNotFoundException {
-        nullBufferActive = false;
-        file = file_;
-        regex = "=";
-        if (!file.exists()) {
-            throw new ConfigrBufferException("File selected to import does not exist.");
-        }
-        loadLineBuffer();
-        loadImportBuffer();
+        this(file_, "=");
     }
 
     /**
-     * Set the regex upon which the configuration map is split. The default regex is "=".<br><br>
-     * key=value ("=" is the regex)<br>
-     * key value (" " is the regex)
+     * Create a new import context with a custom regex.
      *
-     * @param regex_ The new regex.
+     * @param file_ File.
+     * @param regex_ Custom regex.
+     * @throws FileNotFoundException
      */
-    public void setImportRegex(String regex_) {
-        if (regex != null && !regex.isEmpty()) {
-            regex = regex_;
-        } else {
-            throw new ConfigrBufferException("Invalid regex for import buffer.");
+    public ConfigrImportContext(File file_, String regex_) throws FileNotFoundException {
+        nullBufferActive = false;
+        file = file_;
+        if (!file.exists()) {
+            throw new ConfigrBufferException("File selected to import does not exist.");
         }
+        regex = regex_;
+        if (regex == null || regex.isEmpty()) {
+            throw new ConfigrBufferException("Custom regex " + regex + " is invalid.");
+        }
+        loadLineBuffer();
+        loadImportBuffer();
     }
 
     /**
