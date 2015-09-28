@@ -41,5 +41,5 @@ f.writeIfNecessary();
 
 ## To do
 [X] Add import capability<br>
-[&nbsp;&nbsp;] Allow for non-standard config mapping (space instead of '=')<br>
+[X] Allow for non-standard config mapping (space instead of '=')<br>
 [&nbsp;&nbsp;] Add static reference for all classes (easy access)<br>
