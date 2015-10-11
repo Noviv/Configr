@@ -1,5 +1,8 @@
 package org.noviv.configr;
 
+import java.io.FileNotFoundException;
+import org.noviv.configr.io.ConfigrImportContext;
+
 /**
  * Configr status class.
  */
@@ -39,7 +42,8 @@ public class Configr {
     }
 
     /**
-     * Get the check-head of all Configr files. Must be present in order to validate settings file.
+     * Get the check-head of all Configr files. Must be present in order to
+     * validate settings file.
      *
      * @return String containing value used as check-head.
      */
@@ -48,7 +52,8 @@ public class Configr {
     }
 
     /**
-     * Validate the check-head of a Configr file. Compatible with previous versions.
+     * Validate the check-head of a Configr file. Compatible with previous
+     * versions.
      *
      * @param toValidate Check-head to validate.
      * @return Validated.
@@ -68,5 +73,30 @@ public class Configr {
             return false;
         }
         return true;
+    }
+
+    /**
+     * Get a setting from a file.
+     *
+     * @param filePath Path of file.
+     * @param setting Setting.
+     * @return First discovered setting value, or null if the setting is not
+     * found.
+     */
+    public static String getSetting(String filePath, String setting) {
+        ConfigrImportContext importContext;
+        try {
+            importContext = new ConfigrImportContext(filePath);
+        } catch (FileNotFoundException e) {
+            return null;
+        }
+
+        for (ConfigrFile f : importContext.getImportedFiles()) {
+            if (f.getSetting(setting) != null) {
+                return "" + f.getSetting(setting);
+            }
+        }
+
+        return null;
     }
 }
